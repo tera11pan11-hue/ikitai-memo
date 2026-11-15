@@ -1,66 +1,1399 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f7f5ef">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#f8f7f3">
 <title>行きたいところ帳</title>
 <style>
-:root{--bg:#f7f5ef;--card:#fff;--ink:#25251f;--muted:#73736a;--line:#e7e3d9;--accent:#3d6654;--accent2:#e8f0e9;--danger:#a34136}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif}main{max-width:820px;margin:auto;padding:22px 15px 60px}h1{font-size:clamp(1.55rem,5vw,2.2rem);margin:0 0 6px}h2{font-size:1.15rem}.sub{color:var(--muted);margin:0 0 22px;font-size:.93rem}button,input,textarea{font:inherit}button{cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:10px 13px;background:white;color:var(--ink)}button.primary{background:var(--accent);color:white;border-color:var(--accent)}button:disabled{opacity:.5}#loginCard,.panel,.place,.roomcard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;margin:13px 0}#loginCard{text-align:center;padding:28px 18px}.small{font-size:.84rem;color:var(--muted)}.hidden{display:none!important}.userbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.userbar img{width:36px;height:36px;border-radius:50%}.push{flex:1}.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.wide{grid-column:1/-1}label{font-size:.85rem;color:var(--muted);display:block;margin:0 0 5px}input,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:white;color:var(--ink)}textarea{min-height:72px;resize:vertical}.actions,.placeactions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.filters{display:flex;gap:7px;overflow:auto;padding:5px 0 9px}.filter{white-space:nowrap}.filter.active{background:var(--accent2);border-color:#b9cbbb;color:var(--accent);font-weight:650}.place{padding:15px;margin:10px 0}.placehead{display:flex;gap:10px;align-items:flex-start}.place h3{margin:0;font-size:1.08rem;overflow-wrap:anywhere}.note{white-space:pre-wrap;margin:9px 0;color:#55554d;overflow-wrap:anywhere}.meta{font-size:.78rem;color:var(--muted);margin-top:7px;line-height:1.6}.badge{display:inline-block;border-radius:999px;padding:3px 8px;background:#f0eee8;font-size:.75rem;margin-left:6px}.visited{opacity:.72}.visited h3{text-decoration:line-through}.placecheck{width:20px;height:20px;flex:none;margin-top:2px;accent-color:var(--accent)}.placeactions button{font-size:.86rem;padding:7px 10px}.placeactions .del{color:var(--danger)}#status{padding:10px 12px;border-radius:10px;background:#f0eee8;color:var(--muted);font-size:.85rem;margin:10px 0}.empty{text-align:center;padding:28px 10px;color:var(--muted)}.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:10px}.sectionhead h2{margin:0}#peopleFilters{display:flex;gap:7px;flex-wrap:wrap;margin:6px 0 12px}.roomcard{display:flex;align-items:center;gap:12px}.roomicon{width:45px;height:45px;display:grid;place-items:center;background:var(--accent2);border-radius:13px;font-size:1.35rem;flex:none}.roominfo{flex:1;min-width:0}.roominfo strong{display:block;overflow-wrap:anywhere}.roominfo p{margin:4px 0 0}.roomhead{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap}.link{color:var(--accent);overflow-wrap:anywhere}.memberlist{font-size:.83rem;color:var(--muted);margin-top:7px}.hint{background:#f0eee8;padding:10px 12px;border-radius:11px;font-size:.84rem;color:var(--muted)}
-@media(max-width:560px){main{padding:17px 12px 45px}.fields{grid-template-columns:1fr}.wide{grid-column:auto}.panel{padding:14px}}
+:root {
+  --bg: #f8f7f3;
+  --card: #ffffff;
+  --ink: #2a2b27;
+  --muted: #7a7b73;
+  --line: #eae7de;
+  --accent: #426b58;
+  --accent-hover: #355747;
+  --accent-soft: #eaf1ec;
+  --input-bg: #f3f2ed;
+  --danger: #b5453a;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
 
-.menuBar{display:flex;align-items:center;gap:9px;position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0}
-.menuPanel{background:#fff;border:1px solid var(--line);border-radius:15px;padding:12px;margin:0 0 14px}
-.menuPanel .roomcard{margin:7px 0;padding:10px}
-.roomTools{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}
-.listOnly #entryPanel,.listOnly #roomIntro{display:none!important}
-.listOnly #listPanel{border:0;padding:0;background:transparent}
-#roomSettings{margin-top:10px}
-#roomSettings .hint{margin-top:8px}
-.smallButton{font-size:.82rem;padding:7px 10px}
-@media(max-width:560px){.menuBar{top:0}.menuPanel{padding:10px}}
-</style></head><body><main>
-<header><h1>行きたいところ帳 🙌</h1><p class="sub">一緒にいきたいところ、やりたいことを集めよう！！</p></header>
-<section id="loginCard"><h2>ログインして使おう</h2><p class="small">Googleアカウントでログインだ。部屋を作ったり、招待リンクから参加したりできます。</p><button class="primary" id="loginBtn">Googleでログイン</button><p class="small" id="loginError"></p></section>
-<section id="app" class="hidden">
-<div class="menuBar"><button id="menuToggle" aria-expanded="false">☰ メニュー</button><span class="push"></span><span class="small" id="currentRoomLabel">部屋一覧</span></div>
-<div id="menuPanel" class="menuPanel hidden"><button id="roomsToggle" class="smallButton">部屋一覧を表示／しまう ▾</button><div id="roomMenuList" class="hidden"><div id="roomList"><div class="empty">読み込み中…</div></div></div><div class="actions"><button id="profileToggle" class="smallButton">自分の設定</button><button id="menuLogout" class="smallButton">ログアウト</button></div><div id="profilePanel" class="hidden"><label for="profileName">表示名</label><input id="profileName" maxlength="60"><div class="actions"><button id="saveProfile" class="primary smallButton">表示名を保存</button></div><p class="small">プロフィール画像のアップロードは、Firebase Storageの設定を追加してから対応するね。</p></div></div>
-<div class="panel"><div class="userbar"><img id="avatar" alt="" class="hidden"><div><strong id="userName"></strong><div class="small" id="userEmail"></div></div><span class="push"></span><button id="logoutBtn">ログアウト</button></div></div>
-<section id="homeView"><div class="sectionhead"><h2>共有中の部屋一覧🏄🏻‍♀️</h2></div><p class="small">やりたいこと 行きたい場所 見つけたら<br>迷わないで 靴を履いて 出かけよう<br>二人でも、三人以上でもOK！（部屋ごとに行きたい場所が分かれます）</p><div id="homeRoomList"></div><div class="panel"><h2>🐣新しい部屋を作る</h2><form id="createRoomForm"><label for="newRoomName">部屋の名前</label><input id="newRoomName" maxlength="80" required placeholder="例：◯◯家お出かけ/ラーメン会"><div class="actions"><button class="primary" type="submit" id="createRoomBtn">部屋を作成</button></div></form></div>
-<div class="panel"><h2>🌝招待リンクから参加</h2><p class="small">友達から受け取った招待リンクを開くと、その部屋に参加できます。</p><label for="joinRoomId">部屋コード（リンク末尾の room= の値）</label><input id="joinRoomId" placeholder="部屋コードを貼り付け"><div class="actions"><button id="joinRoomBtn" class="primary" type="button">この部屋に参加</button></div><p class="small" id="joinMessage"></p></div></section>
-<section id="roomView" class="hidden"><div id="roomIntro" class="panel"><div class="roomhead"><div><h2 id="roomTitle"></h2><div id="roomMembers" class="memberlist"></div></div><span class="push"></span><button id="backHome" class="smallButton">部屋一覧</button></div><div class="roomTools"><button id="listOnlyBtn" class="smallButton">行き先一覧だけ開く ↗</button><button id="roomSettingsBtn" class="smallButton">⚙ 部屋の設定・招待</button></div><div id="roomSettings" class="hidden"><label>部屋のアイコン（この端末で表示）</label><div class="actions" id="roomEmojiChoices"><button type="button">🐰</button><button type="button">🌷</button><button type="button">🍰</button><button type="button">🚃</button><button type="button">🐈</button><button type="button">🌈</button></div><p class="small">招待リンクは参加してほしい人にだけ送ってね。</p><div class="hint"><div id="inviteUrl" class="link"></div><div class="actions"><button id="copyInvite">招待リンクをコピー</button></div></div></div></div>
-<div id="status">接続中…</div><section class="panel" id="entryPanel"><h2 id="formTitle">場所を追加</h2><form id="placeForm"><input type="hidden" id="editId"><div class="fields" style="margin-top:12px"><div class="wide"><label for="placeName">場所・お店の名前 *</label><input id="placeName" maxlength="120" required placeholder="例：サーモン食べ放題／おもしろ自転車"></div><div><label for="tabelogUrl">食べログURL</label><input id="tabelogUrl" type="url" placeholder="https://tabelog.com/..."></div><div><label for="mapUrl">GoogleマップURL</label><input id="mapUrl" type="url" placeholder="https://maps.app.goo.gl/..."></div><div class="wide"><label for="placeNote">メモ（任意）</label><textarea id="placeNote" maxlength="1500" placeholder="食べたいもの、やりたいこと、意気込みや感想✊"></textarea></div></div><div class="actions"><button class="primary" id="saveBtn" type="submit">追加する</button><button type="button" id="cancelEdit" class="hidden">編集をキャンセル</button></div></form></section>
-<section class="panel" id="listPanel"><div class="sectionhead"><h2>行き先一覧</h2><button id="listCloseBtn" class="smallButton">入力画面に戻る</button></div><label for="search">場所を検索</label><input id="search" placeholder="場所名・メモで検索"><div class="filters" id="statusFilters"><button class="filter active" data-status="all">すべて</button><button class="filter" data-status="unvisited">未訪問</button><button class="filter" data-status="visited">行った！</button></div><label>追加した人で絞り込む</label><div id="peopleFilters"></div><div class="sectionhead"><span class="small" id="count"></span></div><div id="places"><div class="empty">読み込み中…</div></div></section></section></section></main>
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Maru Gothic ProN", "Noto Sans JP", sans-serif;
+  line-height: 1.5;
+  padding-bottom: 84px;
+}
+
+main {
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 16px 16px 32px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Typography & Headers */
+.app-hero {
+  text-align: center;
+  padding: 24px 0 18px;
+}
+.app-hero-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.45rem;
+  font-weight: 800;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+.app-hero-sub {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.section-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  margin: 18px 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* Cards & Panels */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+
+/* Buttons */
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 11px 18px;
+  background: var(--card);
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+button:active {
+  transform: scale(0.98);
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+button.primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  width: 100%;
+  padding: 13px 20px;
+  font-size: 0.95rem;
+  box-shadow: 0 3px 8px rgba(66, 107, 88, 0.2);
+}
+button.primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+button.ghost {
+  background: transparent;
+  border-color: transparent;
+  padding: 6px 10px;
+  color: var(--muted);
+}
+button.small-btn {
+  padding: 7px 13px;
+  font-size: 0.8rem;
+}
+button.outline-pill {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.82rem;
+  color: var(--ink);
+}
+
+/* Inputs */
+label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+input, textarea {
+  font: inherit;
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: var(--input-bg);
+  color: var(--ink);
+  font-size: 0.92rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+input:focus, textarea:focus {
+  outline: none;
+  background: #fff;
+  border-color: var(--accent);
+}
+textarea {
+  min-height: 76px;
+  resize: vertical;
+}
+.field-group {
+  margin-bottom: 10px;
+}
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+@media (max-width: 440px) {
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Top Navigation Bar */
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(248, 247, 243, 0.92);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(234, 231, 222, 0.6);
+}
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--line);
+  font-size: 1.1rem;
+  display: grid;
+  place-items: center;
+}
+.top-title {
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 65%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Room List Cards */
+.room-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+.room-card:hover {
+  border-color: #cbd5ce;
+}
+.room-card:active {
+  transform: scale(0.99);
+}
+.room-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  display: grid;
+  place-items: center;
+  font-size: 1.45rem;
+  flex: none;
+}
+.room-meta {
+  flex: 1;
+  min-width: 0;
+}
+.room-meta strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.room-meta span {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.chevron {
+  color: #b0b0a8;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* Room Detail Header */
+.room-banner {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+.room-banner-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.room-banner-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  display: grid;
+  place-items: center;
+  font-size: 1.6rem;
+  flex: none;
+}
+.room-banner-info {
+  flex: 1;
+  min-width: 0;
+}
+.room-banner-info h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+.room-banner-members {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.room-action-pills {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* Filter Chips */
+.filter-chips {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0 12px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+.chip {
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.chip.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* Place Item Cards */
+.place-item {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow);
+  transition: opacity 0.2s;
+}
+.place-item.visited {
+  background: #fcfbf9;
+}
+.place-item.visited .place-title {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+.place-body {
+  flex: 1;
+  min-width: 0;
+}
+.place-title {
+  margin: 0 0 3px;
+  font-size: 0.98rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.place-note {
+  margin: 0 0 6px;
+  font-size: 0.84rem;
+  color: #5b5c54;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.place-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+.link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-decoration: none;
+}
+.place-submeta {
+  font-size: 0.73rem;
+  color: #96978e;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.place-edit-btns {
+  display: inline-flex;
+  gap: 8px;
+}
+.text-btn {
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-decoration: underline;
+  border-radius: 4px;
+}
+.text-btn.del {
+  color: var(--danger);
+}
+
+/* Circular Check Button */
+.check-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #d1d0c8;
+  background: #fff;
+  padding: 0;
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: transparent;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+.check-circle.checked {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* Drawer Menu */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 32, 28, 0.35);
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.drawer-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(310px, 84vw);
+  background: #fff;
+  z-index: 50;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  overflow-y: auto;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
+}
+.drawer.open {
+  transform: translateX(0);
+}
+.drawer-profile {
+  text-align: center;
+  padding: 10px 0 18px;
+  border-bottom: 1px solid var(--line);
+}
+.drawer-avatar {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  margin: 0 auto 10px;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  font-size: 1.8rem;
+}
+.drawer-section {
+  background: var(--accent-soft);
+  border-radius: 16px;
+  padding: 12px;
+  margin: 16px 0;
+}
+.drawer-room-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.drawer-room-item:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+.drawer-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 6px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: none;
+  border: none;
+  width: 100%;
+  justify-content: flex-start;
+  border-radius: 10px;
+}
+.drawer-link:hover {
+  background: var(--bg);
+}
+
+/* Bottom Navigation Bar */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+  z-index: 30;
+}
+.nav-item {
+  background: none;
+  border: none;
+  padding: 4px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--muted);
+  border-radius: 12px;
+}
+.nav-item.active {
+  color: var(--accent);
+}
+.nav-item svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+.list-only #entryCard,
+.list-only #roomBannerCard {
+  display: none !important;
+}
+.list-only #listCard {
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+}
+
+.hint-box {
+  background: var(--input-bg);
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  word-break: break-all;
+}
+.empty-state {
+  text-align: center;
+  padding: 28px 12px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+.status-pill {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 10px;
+}
+</style>
+</head>
+<body>
+
+<!-- 未ログイン画面 -->
+<main id="loginCard">
+  <div class="app-hero" style="padding-top: 48px;">
+    <h1 class="app-hero-title">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#426b58" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      行きたいところ帳
+    </h1>
+    <p class="app-hero-sub">一緒に行きたい場所を見つけよう</p>
+  </div>
+  <div class="card" style="text-align: center; padding: 28px 20px;">
+    <h2 style="font-size: 1.1rem; margin: 0 0 8px;">ログインして使おう</h2>
+    <p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 20px;">Googleアカウントでログインすると、部屋を作ったり招待リンクから参加したりできます。</p>
+    <button class="primary" id="loginBtn">Googleでログイン</button>
+    <p id="loginError" style="font-size: 0.82rem; color: var(--danger); margin: 12px 0 0;"></p>
+  </div>
+</main>
+
+<!-- ログイン後アプリ本体 -->
+<div id="app" class="hidden">
+
+  <!-- 上部バー -->
+  <header class="top-bar">
+    <button id="topBackBtn" class="icon-btn hidden" aria-label="戻る">‹</button>
+    <div id="topBrand" class="top-title" style="color: var(--accent);">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>行きたいところ帳</span>
+    </div>
+    <div id="topRoomTitle" class="top-title hidden"></div>
+    <button id="menuToggle" class="icon-btn" aria-label="メニュー">☰</button>
+  </header>
+
+  <main>
+    <!-- 1. 部屋一覧画面（ホーム） -->
+    <section id="homeView">
+      <div class="app-hero">
+        <h1 class="app-hero-title">行きたいところ帳</h1>
+        <p class="app-hero-sub">一緒に行きたい場所を見つけよう</p>
+      </div>
+
+      <div class="section-title">
+        <span>参加中の部屋</span>
+      </div>
+      <div id="homeRoomList"></div>
+
+      <div style="margin: 16px 0 22px;">
+        <button class="primary" id="openCreateModalBtn">＋ 部屋を作成</button>
+      </div>
+
+      <!-- 部屋作成フォーム -->
+      <div id="createRoomPanel" class="card hidden">
+        <div class="section-title" style="margin-top: 0;">
+          <span>＋ 新しい部屋を作る</span>
+          <button type="button" class="ghost small-btn" id="closeCreateModalBtn">✕</button>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--muted); margin: 0 0 12px;">みんなで行きたい場所を共有できる部屋を作ろう！</p>
+        <form id="createRoomForm">
+          <div class="field-group">
+            <label for="newRoomName">部屋の名前</label>
+            <input id="newRoomName" maxlength="80" required placeholder="例：おでかけ候補 / 旅行計画">
+          </div>
+          <button class="primary" type="submit" id="createRoomBtn">部屋を作成する</button>
+        </form>
+      </div>
+
+      <!-- 招待リンクから参加 -->
+      <div class="card">
+        <div class="section-title" style="margin-top: 0;">
+          <span>招待リンクから参加</span>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--muted); margin: 0 0 10px;">受け取った招待リンクの部屋コードを入力して参加できます。</p>
+        <div class="field-group">
+          <input id="joinRoomId" placeholder="部屋コードを貼り付け">
+        </div>
+        <button id="joinRoomBtn" class="outline-pill" style="width: 100%; justify-content: center; padding: 11px;">この部屋に参加</button>
+        <p id="joinMessage" style="font-size: 0.82rem; color: var(--accent); margin: 8px 0 0;"></p>
+      </div>
+    </section>
+
+    <!-- 2. 部屋ページ -->
+    <section id="roomView" class="hidden">
+      <div id="roomBannerCard" class="room-banner">
+        <div class="room-banner-top">
+          <div class="room-banner-icon" id="roomBannerIcon">📍</div>
+          <div class="room-banner-info">
+            <h2 id="roomTitle"></h2>
+            <div id="roomMembers" class="room-banner-members"></div>
+          </div>
+          <button id="roomSettingsBtn" class="icon-btn" aria-label="部屋の設定">⚙</button>
+        </div>
+
+        <div class="room-action-pills">
+          <button id="toggleIconPickerBtn" class="outline-pill">🎨 アイコン変更</button>
+          <button id="toggleInviteBoxBtn" class="outline-pill">👥 メンバー招待</button>
+        </div>
+
+        <!-- 全絵文字から選べるアイコン変更エリア -->
+        <div id="iconPickerBox" class="hidden" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line);">
+          <label for="roomEmojiInput">部屋のアイコン（絵文字を入力または選択）</label>
+          <div style="display: flex; gap: 8px;">
+            <input id="roomEmojiInput" maxlength="4" style="text-align: center; font-size: 1.3rem;" placeholder="🐰">
+            <button type="button" id="saveRoomEmojiBtn" class="primary" style="width: auto; padding: 0 16px;">変更</button>
+          </div>
+        </div>
+
+        <!-- 招待リンクエリア -->
+        <div id="inviteBox" class="hidden" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line);">
+          <label>招待リンク（参加してほしい人に共有してね）</label>
+          <div class="hint-box">
+            <div id="inviteUrl" style="margin-bottom: 8px;"></div>
+            <button type="button" id="copyInvite" class="outline-pill" style="width: 100%;">招待リンクをコピー</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="status" class="status-pill">接続中…</div>
+
+      <!-- 行き先入力カード -->
+      <section class="card" id="entryCard">
+        <div class="section-title" style="margin-top: 0;">
+          <span id="formTitle">📍 行き先を入力しよう！</span>
+        </div>
+        <form id="placeForm">
+          <input type="hidden" id="editId">
+          <div class="field-group">
+            <input id="placeName" maxlength="120" required placeholder="🔍 行き先の名前（必須）">
+          </div>
+          <div class="field-row">
+            <input id="mapUrl" type="url" placeholder="GoogleマップURL（任意）">
+            <input id="tabelogUrl" type="url" placeholder="食べログURL（任意）">
+          </div>
+          <div class="field-group">
+            <textarea id="placeNote" maxlength="1500" placeholder="メモ（任意：食べたいもの、やりたいことなど）"></textarea>
+          </div>
+          <button class="primary" id="saveBtn" type="submit">＋ 追加する</button>
+          <button type="button" id="cancelEdit" class="outline-pill hidden" style="width: 100%; margin-top: 8px;">編集をキャンセル</button>
+        </form>
+      </section>
+
+      <!-- 行き先一覧カード -->
+      <section class="card" id="listCard">
+        <div class="section-title" style="margin-top: 0;">
+          <span>📍 行き先一覧 <small id="count" style="color: var(--muted); font-weight: 500; margin-left: 4px;"></small></span>
+          <button id="listOnlyBtn" class="outline-pill small-btn">一覧を見る ›</button>
+          <button id="listCloseBtn" class="outline-pill small-btn hidden">閉じる ⌃</button>
+        </div>
+
+        <div class="field-group" style="margin-bottom: 6px;">
+          <input id="search" placeholder="🔍 行き先を検索...">
+        </div>
+
+        <div class="filter-chips" id="statusFilters">
+          <button class="chip active" data-status="all">すべて</button>
+          <button class="chip" data-status="unvisited">未訪問</button>
+          <button class="chip" data-status="visited">訪問済み</button>
+        </div>
+
+        <div class="filter-chips" id="peopleFilters" style="margin-top: 0;"></div>
+
+        <div id="places"><div class="empty-state">読み込み中…</div></div>
+      </section>
+    </section>
+
+    <!-- マイページ・設定ビュー（画像アップロード対応） -->
+    <section id="settingsView" class="hidden">
+      <div class="section-title"><span>自分の設定・マイページ</span></div>
+      <div class="card">
+        <div style="text-align: center; margin-bottom: 16px;">
+          <div style="position: relative; display: inline-block;">
+            <img id="settingsAvatar" alt="" class="drawer-avatar hidden" style="cursor: pointer;">
+            <div id="settingsAvatarFallback" class="drawer-avatar" style="cursor: pointer;">👤</div>
+          </div>
+          <div style="margin-top: 8px;">
+            <input type="file" id="avatarFileInput" accept="image/*" class="hidden">
+            <button type="button" id="uploadAvatarBtn" class="outline-pill small-btn">📷 アイコン画像を選ぶ</button>
+          </div>
+          <span id="uploadStatus" style="font-size: 0.75rem; color: var(--muted); display: block; margin-top: 4px;"></span>
+        </div>
+        <div class="field-group">
+          <label for="profileName">表示名</label>
+          <input id="profileName" maxlength="60">
+        </div>
+        <button id="saveProfile" class="primary">表示名とアイコンを保存</button>
+        <button id="logoutBtn" class="outline-pill" style="width: 100%; margin-top: 12px; color: var(--danger);">ログアウト</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- 3. スライドメニュー -->
+  <div id="drawerBackdrop" class="drawer-backdrop"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <div style="display: flex; justify-content: flex-end;">
+      <button id="closeDrawerBtn" class="ghost" style="font-size: 1.2rem; padding: 4px 8px;">✕</button>
+    </div>
+    <div class="drawer-profile">
+      <img id="drawerAvatar" alt="" class="drawer-avatar hidden">
+      <div id="drawerAvatarFallback" class="drawer-avatar">👤</div>
+      <strong id="drawerUserName" style="display: block; font-size: 1.05rem;"></strong>
+      <span id="drawerUserEmail" style="font-size: 0.8rem; color: var(--muted);"></span>
+    </div>
+
+    <div class="drawer-section">
+      <div style="font-size: 0.85rem; font-weight: 700; color: var(--accent); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+        <span>🏠 部屋一覧</span>
+      </div>
+      <div id="roomMenuList"></div>
+    </div>
+
+    <button id="drawerSettingsBtn" class="drawer-link">⚙ 自分の設定</button>
+    <button id="menuLogout" class="drawer-link" style="color: var(--danger);">🚪 ログアウト</button>
+  </aside>
+
+  <!-- 下部ナビゲーションバー -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-nav="rooms">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>部屋</span>
+    </button>
+    <button class="nav-item" data-nav="list">
+      <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      <span>一覧</span>
+    </button>
+    <button class="nav-item" data-nav="settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>設定</span>
+    </button>
+  </nav>
+</div>
+
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut,setPersistence,browserLocalPersistence,updateProfile} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import {getFirestore,collection,addDoc,doc,getDoc,updateDoc,deleteDoc,onSnapshot,query,orderBy,where,serverTimestamp,arrayUnion} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyApyOHDmD0N8K4knVjKFJXtKH56IB9N5c8",authDomain:"ikitaitokoro-d1b97.firebaseapp.com",projectId:"ikitaitokoro-d1b97",storageBucket:"ikitaitokoro-d1b97.firebasestorage.app",messagingSenderId:"658300398303",appId:"1:658300398303:web:1f8e42536fb2871e0d976a",measurementId:"G-25R11QH32T"};
-const $=id=>document.getElementById(id),app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);await setPersistence(auth,browserLocalPersistence);let user=null,rooms=[],activeRoom=null,places=[],stopRooms=null,stopPlaces=null,statusFilter="all",personFilter="all",listOnly=false;
-const name=()=>user?.displayName||user?.email||"Googleユーザー";const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function showHome(){document.getElementById("roomView").classList.remove("listOnly");listOnly=false;if(stopPlaces){stopPlaces();stopPlaces=null}activeRoom=null;$("homeView").classList.remove("hidden");$("roomView").classList.add("hidden")}
-function renderRooms(){const html=rooms.length?rooms.map(r=>`<div class="roomcard"><div class="roomicon">${esc(localStorage.getItem("ikitai_room_icon_"+r.id)||"📍")}</div><div class="roominfo"><strong>${esc(r.name)}</strong><p class="small">${(r.memberUids||[]).length}人で共有中</p></div><button data-open="${esc(r.id)}">開く</button></div>`).join(""):'<div class="empty">まだ部屋がありません。下から作成するか、招待リンクで参加しよう〜！</div>';$("roomMenuList").innerHTML=html;$("homeRoomList").innerHTML=html;document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openRoom(b.dataset.open))}
-async function openRoom(id){let r=rooms.find(x=>x.id===id);if(!r){const s=await getDoc(doc(db,"rooms",id));if(!s.exists())throw Error("部屋が見つかりません");r={id,...s.data()}}activeRoom=r;localStorage.setItem("ikitai_last_room",id);$("currentRoomLabel").textContent=r.name;$("homeView").classList.add("hidden");$("roomView").classList.remove("hidden");$("roomTitle").textContent=(localStorage.getItem("ikitai_room_icon_"+id)||"📍")+" "+r.name;$("roomMembers").textContent="参加メンバー："+(r.memberNames||[]).join("、");const u=new URL(location.href);u.searchParams.set("room",id);$("inviteUrl").textContent=u.toString();if(stopPlaces)stopPlaces();$("status").textContent="場所を読み込み中…";stopPlaces=onSnapshot(query(collection(db,"rooms",id,"places"),orderBy("createdAt","desc")),s=>{places=s.docs.map(d=>({id:d.id,...d.data()}));$("status").textContent="リアルタイムで共有中";renderPlaces()},e=>{$("status").textContent="読み込み失敗：Firestoreルールを確認してください";console.error(e)})}
-async function joinRoom(id){id=(id||"").trim();if(!id){$("joinMessage").textContent="部屋コードを入力してください";return}try{const ref=doc(db,"rooms",id),s=await getDoc(ref);if(!s.exists())throw Error("部屋が見つかりません");const d=s.data();if(!(d.memberUids||[]).includes(user.uid))await updateDoc(ref,{memberUids:arrayUnion(user.uid),memberNames:arrayUnion(name()),updatedAt:serverTimestamp()});$("joinMessage").textContent="参加しました";await openRoom(id)}catch(e){console.error(e);$("joinMessage").textContent="参加できませんでした。招待コードとFirestoreルールを確認してください。"}}
-function renderPeople(){const people=[...new Map(places.map(p=>[p.createdByUid,{uid:p.createdByUid,name:p.createdByName||"メンバー"}])).values()];$("peopleFilters").innerHTML=[{uid:"all",name:"全員"},...people].map(p=>`<button class="filter ${personFilter===p.uid?"active":""}" data-person="${esc(p.uid)}">${esc(p.name)}</button>`).join("");document.querySelectorAll("[data-person]").forEach(b=>b.onclick=()=>{personFilter=b.dataset.person;renderPlaces()})}
-function renderPlaces(){renderPeople();const term=$("search").value.trim().toLowerCase(),list=places.filter(p=>(statusFilter==="all"||(statusFilter==="visited"&&p.visited)||(statusFilter==="unvisited"&&!p.visited))&&(personFilter==="all"||p.createdByUid===personFilter)&&(!term||`${p.name} ${p.note||""}`.toLowerCase().includes(term)));$("count").textContent=`${list.length}件`;$("places").innerHTML=list.length?list.map(p=>`<article class="place ${p.visited?"visited":""}"><div class="placehead"><input class="placecheck" type="checkbox" data-visit="${esc(p.id)}" ${p.visited?"checked":""}><div style="flex:1;min-width:0"><h3>${esc(p.name)}${p.visited?'<span class="badge">行った</span>':""}</h3>${p.note?`<p class="note">${esc(p.note)}</p>`:""}<div class="meta">追加：${esc(p.createdByName||"メンバー")} ／ 最終編集：${esc(p.updatedByName||p.createdByName||"メンバー")}</div><div class="placeactions">${p.mapUrl?`<a class="link" href="${esc(p.mapUrl)}" target="_blank" rel="noopener">Googleマップ</a>`:""}${p.tabelogUrl?`<a class="link" href="${esc(p.tabelogUrl)}" target="_blank" rel="noopener">食べログ</a>`:""}<button data-edit="${esc(p.id)}">編集</button><button class="del" data-del="${esc(p.id)}">削除</button></div></div></div></article>`).join(''):'<div class="empty">該当する場所はありません。</div>';document.querySelectorAll("[data-visit]").forEach(el=>el.onchange=()=>changePlace(el.dataset.visit,{visited:el.checked}));document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editPlace(b.dataset.edit));document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>deletePlace(b.dataset.del))}
-async function changePlace(id,data){try{await updateDoc(doc(db,"rooms",activeRoom.id,"places",id),{...data,updatedByUid:user.uid,updatedByName:name(),updatedAt:serverTimestamp()})}catch(e){alert("更新できませんでした。ルールを確認してください。");console.error(e)}}
-function resetForm(){$("placeForm").reset();$("editId").value="";$("formTitle").textContent="場所を追加";$("saveBtn").textContent="追加する";$("cancelEdit").classList.add("hidden")}
-function editPlace(id){const p=places.find(x=>x.id===id);if(!p)return;$("editId").value=id;$("placeName").value=p.name||"";$("tabelogUrl").value=p.tabelogUrl||"";$("mapUrl").value=p.mapUrl||"";$("placeNote").value=p.note||"";$("formTitle").textContent="場所を編集";$("saveBtn").textContent="変更を保存";$("cancelEdit").classList.remove("hidden");$("placeName").scrollIntoView({behavior:"smooth",block:"center"})}
-async function deletePlace(id){if(!confirm("この場所を削除しますか？"))return;try{await deleteDoc(doc(db,"rooms",activeRoom.id,"places",id))}catch(e){alert("削除できませんでした。");console.error(e)}}
-$("loginBtn").onclick=async()=>{try{await signInWithPopup(auth,new GoogleAuthProvider());$("loginError").textContent=""}catch(e){const m={"auth/unauthorized-domain":"このドメインはFirebaseで承認されていません。Authenticationの承認済みドメインに追加してください。","auth/popup-blocked":"ポップアップがブロックされました。Safariの設定を確認してください。","auth/popup-closed-by-user":"ログイン画面が閉じられました。"};$("loginError").textContent=m[e.code]||`ログイン失敗：${e.code||e.message}`}};
-$("logoutBtn").onclick=()=>signOut(auth);onAuthStateChanged(auth,async u=>{user=u;$("loginCard").classList.toggle("hidden",!!u);$("app").classList.toggle("hidden",!u);if(!u){if(stopRooms)stopRooms();if(stopPlaces)stopPlaces();stopRooms=stopPlaces=null;showHome();return}$("userName").textContent=name();$("userEmail").textContent=u.email||"";if(u.photoURL){$("avatar").src=u.photoURL;$("avatar").classList.remove("hidden")}if(stopRooms)stopRooms();stopRooms=onSnapshot(query(collection(db,"rooms"),where("memberUids","array-contains",u.uid)),s=>{rooms=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.name||"").localeCompare(b.name||"","ja"));renderRooms();const last=localStorage.getItem("ikitai_last_room");if(!activeRoom&&last&&rooms.some(r=>r.id===last))openRoom(last)},e=>{console.error(e);$("roomList").textContent="部屋一覧を読み込めません。Firestoreルールを確認してください。"});const invite=new URL(location.href).searchParams.get("room");if(invite){$("joinRoomId").value=invite;await joinRoom(invite);history.replaceState(null,"",location.pathname+location.hash)}else showHome()});
-$("createRoomForm").onsubmit=async e=>{e.preventDefault();const n=$("newRoomName").value.trim();if(!n)return;$("createRoomBtn").disabled=true;try{const ref=await addDoc(collection(db,"rooms"),{name:n,ownerUid:user.uid,memberUids:[user.uid],memberNames:[name()],createdAt:serverTimestamp(),updatedAt:serverTimestamp()});$("newRoomName").value="";await openRoom(ref.id)}catch(e){console.error(e);alert("部屋を作成できませんでした。Firestoreルールを確認してください。")}finally{$("createRoomBtn").disabled=false}};
-$("joinRoomBtn").onclick=()=>joinRoom($("joinRoomId").value);$("backHome").onclick=showHome;$("copyInvite").onclick=async()=>{try{await navigator.clipboard.writeText($("inviteUrl").textContent);$("copyInvite").textContent="コピーしました！"}catch(e){prompt("このリンクをコピーしてください",$("inviteUrl").textContent)}};
-$("placeForm").onsubmit=async e=>{e.preventDefault();if(!activeRoom)return;const id=$("editId").value,p={name:$("placeName").value.trim(),tabelogUrl:$("tabelogUrl").value.trim(),mapUrl:$("mapUrl").value.trim(),note:$("placeNote").value.trim(),updatedByUid:user.uid,updatedByName:name(),updatedAt:serverTimestamp()};$("saveBtn").disabled=true;try{if(id)await updateDoc(doc(db,"rooms",activeRoom.id,"places",id),p);else await addDoc(collection(db,"rooms",activeRoom.id,"places"),{...p,visited:false,createdByUid:user.uid,createdByName:name(),createdAt:serverTimestamp()});resetForm()}catch(e){console.error(e);alert("保存できませんでした。Firestoreルールを確認してください。")}finally{$("saveBtn").disabled=false}};
-$("cancelEdit").onclick=resetForm;$("search").oninput=renderPlaces;document.querySelectorAll("[data-status]").forEach(b=>b.onclick=()=>{statusFilter=b.dataset.status;document.querySelectorAll("[data-status]").forEach(x=>x.classList.toggle("active",x===b));renderPlaces()});
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, updateProfile } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, where, serverTimestamp, arrayUnion } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
 
-$("menuToggle").onclick=()=>{$("menuPanel").classList.toggle("hidden")};
-$("roomsToggle").onclick=()=>{$("roomMenuList").classList.toggle("hidden")};
-$("profileToggle").onclick=()=>{$("profilePanel").classList.toggle("hidden");$("profileName").value=name()};
-$("menuLogout").onclick=()=>signOut(auth);
-$("saveProfile").onclick=async()=>{const n=$("profileName").value.trim();if(!n){alert("表示名を入力してください");return}try{await updateProfile(auth.currentUser,{displayName:n});$("userName").textContent=n;alert("表示名を保存しました。次回以降の追加・編集に反映されます。")}catch(e){alert("保存できませんでした");console.error(e)}};
-$("listOnlyBtn").onclick=()=>{listOnly=true;$("roomView").classList.add("listOnly");$("listPanel").scrollIntoView({behavior:"smooth"})};
-$("listCloseBtn").onclick=()=>{listOnly=false;$("roomView").classList.remove("listOnly");$("roomIntro").scrollIntoView({behavior:"smooth"})};
-$("roomSettingsBtn").onclick=()=>$("roomSettings").classList.toggle("hidden");
-document.querySelectorAll("#roomEmojiChoices button").forEach(b=>b.onclick=()=>{if(!activeRoom)return;localStorage.setItem("ikitai_room_icon_"+activeRoom.id,b.textContent);$("roomTitle").dataset.icon=b.textContent;$("roomTitle").textContent=b.textContent+" "+activeRoom.name});
+const firebaseConfig = {
+  apiKey: "AIzaSyApyOHDmD0N8K4knVjKFJXtKH56IB9N5c8",
+  authDomain: "ikitaitokoro-d1b97.firebaseapp.com",
+  projectId: "ikitaitokoro-d1b97",
+  storageBucket: "ikitaitokoro-d1b97.firebasestorage.app",
+  messagingSenderId: "658300398303",
+  appId: "1:658300398303:web:1f8e42536fb2871e0d976a",
+  measurementId: "G-25R11QH32T"
+};
 
-</script></body></html>
+const $ = id => document.getElementById(id);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+await setPersistence(auth, browserLocalPersistence);
+
+let user = null, rooms = [], activeRoom = null, places = [];
+let stopRooms = null, stopPlaces = null;
+let statusFilter = "all", personFilter = "all", listOnly = false;
+let uploadedPhotoURL = null;
+
+const userName = () => user?.displayName || user?.email || "Googleユーザー";
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const getRoomIcon = id => localStorage.getItem("ikitai_room_icon_" + id) || "📍";
+
+function setActiveNav(key) {
+  document.querySelectorAll(".nav-item").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.nav === key);
+  });
+}
+
+function toggleDrawer(open) {
+  $("drawer").classList.toggle("open", open);
+  $("drawerBackdrop").classList.toggle("open", open);
+}
+
+function setListOnlyMode(enable) {
+  listOnly = enable;
+  $("roomView").classList.toggle("list-only", enable);
+  $("listOnlyBtn").classList.toggle("hidden", enable);
+  $("listCloseBtn").classList.toggle("hidden", !enable);
+  if (enable) {
+    $("topRoomTitle").textContent = "行き先一覧";
+    setActiveNav("list");
+  } else if (activeRoom) {
+    $("topRoomTitle").textContent = activeRoom.name;
+    setActiveNav("rooms");
+  }
+}
+
+function showHome() {
+  setListOnlyMode(false);
+  if (stopPlaces) { stopPlaces(); stopPlaces = null; }
+  activeRoom = null;
+  $("homeView").classList.remove("hidden");
+  $("roomView").classList.add("hidden");
+  $("settingsView").classList.add("hidden");
+  $("topBackBtn").classList.add("hidden");
+  $("topBrand").classList.remove("hidden");
+  $("topRoomTitle").classList.add("hidden");
+  setActiveNav("rooms");
+}
+
+function showSettings() {
+  toggleDrawer(false);
+  $("homeView").classList.add("hidden");
+  $("roomView").classList.add("hidden");
+  $("settingsView").classList.remove("hidden");
+  $("topBackBtn").classList.remove("hidden");
+  $("topBrand").classList.add("hidden");
+  $("topRoomTitle").classList.remove("hidden");
+  $("topRoomTitle").textContent = "自分の設定";
+  $("profileName").value = userName();
+  uploadedPhotoURL = user?.photoURL || null;
+  updateAvatarDisplay(uploadedPhotoURL);
+  setActiveNav("settings");
+}
+
+function updateAvatarDisplay(url) {
+  const targets = [
+    { img: $("drawerAvatar"), fb: $("drawerAvatarFallback") },
+    { img: $("settingsAvatar"), fb: $("settingsAvatarFallback") }
+  ];
+  targets.forEach(t => {
+    if (url) {
+      t.img.src = url;
+      t.img.classList.remove("hidden");
+      t.fb.classList.add("hidden");
+    } else {
+      t.img.classList.add("hidden");
+      t.fb.classList.remove("hidden");
+    }
+  });
+}
+
+function renderRooms() {
+  if (!rooms.length) {
+    $("homeRoomList").innerHTML = '<div class="empty-state card">まだ部屋がありません。「＋ 部屋を作成」から作ってみよう！</div>';
+    $("roomMenuList").innerHTML = '<div style="font-size:0.8rem;color:var(--muted);padding:6px;">参加中の部屋はありません</div>';
+    return;
+  }
+
+  $("homeRoomList").innerHTML = rooms.map(r => `
+    <div class="room-card" data-open="${esc(r.id)}">
+      <div class="room-avatar">${esc(getRoomIcon(r.id))}</div>
+      <div class="room-meta">
+        <strong>${esc(r.name)}</strong>
+        <span>${(r.memberUids || []).length}人で共有中</span>
+      </div>
+      <span class="chevron">›</span>
+    </div>
+  `).join("");
+
+  $("roomMenuList").innerHTML = rooms.map(r => `
+    <div class="drawer-room-item" data-open="${esc(r.id)}">
+      <span style="font-size:1.2rem;">${esc(getRoomIcon(r.id))}</span>
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(r.name)}</span>
+    </div>
+  `).join("");
+
+  document.querySelectorAll("[data-open]").forEach(el => {
+    el.onclick = () => {
+      toggleDrawer(false);
+      openRoom(el.dataset.open);
+    };
+  });
+}
+
+async function openRoom(id) {
+  let r = rooms.find(x => x.id === id);
+  if (!r) {
+    const s = await getDoc(doc(db, "rooms", id));
+    if (!s.exists()) throw Error("部屋が見つかりません");
+    r = { id, ...s.data() };
+  }
+  activeRoom = r;
+  localStorage.setItem("ikitai_last_room", id);
+
+  $("homeView").classList.add("hidden");
+  $("settingsView").classList.add("hidden");
+  $("roomView").classList.remove("hidden");
+  $("topBackBtn").classList.remove("hidden");
+  $("topBrand").classList.add("hidden");
+  $("topRoomTitle").classList.remove("hidden");
+  $("topRoomTitle").textContent = r.name;
+
+  const currentIcon = getRoomIcon(id);
+  $("roomBannerIcon").textContent = currentIcon;
+  $("roomEmojiInput").value = currentIcon;
+  $("roomTitle").textContent = r.name;
+  $("roomMembers").textContent = `${(r.memberUids || []).length}人・${(r.memberNames || []).join("、")}`;
+
+  const u = new URL(location.href);
+  u.searchParams.set("room", id);
+  $("inviteUrl").textContent = u.toString();
+
+  setListOnlyMode(false);
+
+  if (stopPlaces) stopPlaces();
+  $("status").textContent = "読み込み中…";
+  stopPlaces = onSnapshot(
+    query(collection(db, "rooms", id, "places"), orderBy("createdAt", "desc")),
+    s => {
+      places = s.docs.map(d => ({ id: d.id, ...d.data() }));
+      $("status").textContent = "リアルタイム共有中";
+      renderPlaces();
+    },
+    e => {
+      $("status").textContent = "読み込み失敗：Firestoreルールを確認してください";
+      console.error(e);
+    }
+  );
+}
+
+async function joinRoom(id) {
+  id = (id || "").trim();
+  if (!id) {
+    $("joinMessage").textContent = "部屋コードを入力してください";
+    return;
+  }
+  try {
+    const ref = doc(db, "rooms", id);
+    const s = await getDoc(ref);
+    if (!s.exists()) throw Error("部屋が見つかりません");
+    const d = s.data();
+    if (!(d.memberUids || []).includes(user.uid)) {
+      await updateDoc(ref, {
+        memberUids: arrayUnion(user.uid),
+        memberNames: arrayUnion(userName()),
+        updatedAt: serverTimestamp()
+      });
+    }
+    $("joinMessage").textContent = "参加しました！";
+    await openRoom(id);
+  } catch (e) {
+    console.error(e);
+    $("joinMessage").textContent = "参加できませんでした。招待コードを確認してください。";
+  }
+}
+
+function renderPeople() {
+  const people = [...new Map(places.map(p => [p.createdByUid, { uid: p.createdByUid, name: p.createdByName || "メンバー" }])).values()];
+  if (people.length <= 1) {
+    $("peopleFilters").innerHTML = "";
+    return;
+  }
+  $("peopleFilters").innerHTML = [{ uid: "all", name: "全員" }, ...people].map(p => `
+    <button class="chip ${personFilter === p.uid ? "active" : ""}" data-person="${esc(p.uid)}">${esc(p.name)}</button>
+  `).join("");
+  document.querySelectorAll("[data-person]").forEach(b => {
+    b.onclick = () => {
+      personFilter = b.dataset.person;
+      renderPlaces();
+    };
+  });
+}
+
+function renderPlaces() {
+  renderPeople();
+  const term = $("search").value.trim().toLowerCase();
+  const list = places.filter(p =>
+    (statusFilter === "all" || (statusFilter === "visited" && p.visited) || (statusFilter === "unvisited" && !p.visited)) &&
+    (personFilter === "all" || p.createdByUid === personFilter) &&
+    (!term || `${p.name} ${p.note || ""}`.toLowerCase().includes(term))
+  );
+
+  $("count").textContent = `${list.length}件`;
+  $("places").innerHTML = list.length ? list.map(p => `
+    <article class="place-item ${p.visited ? "visited" : ""}">
+      <div class="place-body">
+        <h3 class="place-title">${esc(p.name)}</h3>
+        ${p.note ? `<p class="place-note">${esc(p.note)}</p>` : ""}
+        ${(p.mapUrl || p.tabelogUrl) ? `
+          <div class="place-links">
+            ${p.mapUrl ? `<a class="link-pill" href="${esc(p.mapUrl)}" target="_blank" rel="noopener">📍 マップ</a>` : ""}
+            ${p.tabelogUrl ? `<a class="link-pill" href="${esc(p.tabelogUrl)}" target="_blank" rel="noopener">🍴 食べログ</a>` : ""}
+          </div>
+        ` : ""}
+        <div class="place-submeta">
+          <span>追加: ${esc(p.createdByName || "メンバー")}</span>
+          <span class="place-edit-btns">
+            <button type="button" class="text-btn" data-edit="${esc(p.id)}">編集</button>
+            <button type="button" class="text-btn del" data-del="${esc(p.id)}">削除</button>
+          </span>
+        </div>
+      </div>
+      <button type="button" class="check-circle ${p.visited ? "checked" : ""}" data-visit="${esc(p.id)}" aria-label="訪問済み切り替え">
+        ${p.visited ? "✓" : ""}
+      </button>
+    </article>
+  `).join("") : '<div class="empty-state">該当する行き先はありません。</div>';
+
+  document.querySelectorAll("[data-visit]").forEach(el => {
+    el.onclick = () => {
+      const target = places.find(x => x.id === el.dataset.visit);
+      if (target) changePlace(target.id, { visited: !target.visited });
+    };
+  });
+  document.querySelectorAll("[data-edit]").forEach(b => b.onclick = () => editPlace(b.dataset.edit));
+  document.querySelectorAll("[data-del]").forEach(b => b.onclick = () => deletePlace(b.dataset.del));
+}
+
+async function changePlace(id, data) {
+  try {
+    await updateDoc(doc(db, "rooms", activeRoom.id, "places", id), {
+      ...data,
+      updatedByUid: user.uid,
+      updatedByName: userName(),
+      updatedAt: serverTimestamp()
+    });
+  } catch (e) {
+    alert("更新できませんでした。");
+    console.error(e);
+  }
+}
+
+function resetForm() {
+  $("placeForm").reset();
+  $("editId").value = "";
+  $("formTitle").textContent = "📍 行き先を入力しよう！";
+  $("saveBtn").textContent = "＋ 追加する";
+  $("cancelEdit").classList.add("hidden");
+}
+
+function editPlace(id) {
+  const p = places.find(x => x.id === id);
+  if (!p) return;
+  if (listOnly) setListOnlyMode(false);
+  $("editId").value = id;
+  $("placeName").value = p.name || "";
+  $("tabelogUrl").value = p.tabelogUrl || "";
+  $("mapUrl").value = p.mapUrl || "";
+  $("placeNote").value = p.note || "";
+  $("formTitle").textContent = "✏️ 行き先を編集";
+  $("saveBtn").textContent = "変更を保存";
+  $("cancelEdit").classList.remove("hidden");
+  $("entryCard").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+async function deletePlace(id) {
+  if (!confirm("この場所を削除しますか？")) return;
+  try {
+    await deleteDoc(doc(db, "rooms", activeRoom.id, "places", id));
+  } catch (e) {
+    alert("削除できませんでした。");
+    console.error(e);
+  }
+}
+
+/* Auth & Events */
+$("loginBtn").onclick = async () => {
+  try {
+    await signInWithPopup(auth, new GoogleAuthProvider());
+    $("loginError").textContent = "";
+  } catch (e) {
+    const m = {
+      "auth/unauthorized-domain": "このドメインはFirebaseで承認されていません。",
+      "auth/popup-blocked": "ポップアップがブロックされました。",
+      "auth/popup-closed-by-user": "ログイン画面が閉じられました。"
+    };
+    $("loginError").textContent = m[e.code] || `ログイン失敗：${e.code || e.message}`;
+  }
+};
+
+$("logoutBtn").onclick = () => signOut(auth);
+$("menuLogout").onclick = () => signOut(auth);
+
+onAuthStateChanged(auth, async u => {
+  user = u;
+  $("loginCard").classList.toggle("hidden", !!u);
+  $("app").classList.toggle("hidden", !u);
+  if (!u) {
+    if (stopRooms) stopRooms();
+    if (stopPlaces) stopPlaces();
+    stopRooms = stopPlaces = null;
+    showHome();
+    return;
+  }
+
+  const nm = userName();
+  $("drawerUserName").textContent = nm;
+  $("drawerUserEmail").textContent = u.email || "";
+  $("settingsUserName").textContent = nm;
+  $("settingsUserEmail").textContent = u.email || "";
+  updateAvatarDisplay(u.photoURL);
+
+  if (stopRooms) stopRooms();
+  stopRooms = onSnapshot(
+    query(collection(db, "rooms"), where("memberUids", "array-contains", u.uid)),
+    s => {
+      rooms = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.name || "").localeCompare(b.name || "", "ja"));
+      renderRooms();
+      const last = localStorage.getItem("ikitai_last_room");
+      if (!activeRoom && last && rooms.some(r => r.id === last)) openRoom(last);
+    },
+    e => console.error(e)
+  );
+
+  const invite = new URL(location.href).searchParams.get("room");
+  if (invite) {
+    $("joinRoomId").value = invite;
+    await joinRoom(invite);
+    history.replaceState(null, "", location.pathname + location.hash);
+  } else {
+    showHome();
+  }
+});
+
+/* UI Interactions */
+$("openCreateModalBtn").onclick = () => {
+  $("createRoomPanel").classList.remove("hidden");
+  $("newRoomName").focus();
+};
+$("closeCreateModalBtn").onclick = () => $("createRoomPanel").classList.add("hidden");
+
+$("createRoomForm").onsubmit = async e => {
+  e.preventDefault();
+  const n = $("newRoomName").value.trim();
+  if (!n) return;
+  $("createRoomBtn").disabled = true;
+  try {
+    const ref = await addDoc(collection(db, "rooms"), {
+      name: n,
+      ownerUid: user.uid,
+      memberUids: [user.uid],
+      memberNames: [userName()],
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+    $("newRoomName").value = "";
+    $("createRoomPanel").classList.add("hidden");
+    await openRoom(ref.id);
+  } catch (e) {
+    console.error(e);
+    alert("部屋を作成できませんでした。");
+  } finally {
+    $("createRoomBtn").disabled = false;
+  }
+};
+
+$("joinRoomBtn").onclick = () => joinRoom($("joinRoomId").value);
+$("topBackBtn").onclick = showHome;
+
+$("toggleIconPickerBtn").onclick = () => {
+  $("iconPickerBox").classList.toggle("hidden");
+  $("inviteBox").classList.add("hidden");
+};
+$("toggleInviteBoxBtn").onclick = () => {
+  $("inviteBox").classList.toggle("hidden");
+  $("iconPickerBox").classList.add("hidden");
+};
+$("roomSettingsBtn").onclick = () => {
+  $("inviteBox").classList.toggle("hidden");
+};
+
+$("saveRoomEmojiBtn").onclick = () => {
+  if (!activeRoom) return;
+  const val = $("roomEmojiInput").value.trim() || "📍";
+  localStorage.setItem("ikitai_room_icon_" + activeRoom.id, val);
+  $("roomBannerIcon").textContent = val;
+  renderRooms();
+  $("iconPickerBox").classList.add("hidden");
+};
+
+$("copyInvite").onclick = async () => {
+  try {
+    await navigator.clipboard.writeText($("inviteUrl").textContent);
+    $("copyInvite").textContent = "コピーしました！";
+    setTimeout(() => { $("copyInvite").textContent = "招待リンクをコピー"; }, 2000);
+  } catch (e) {
+    prompt("このリンクをコピーしてください", $("inviteUrl").textContent);
+  }
+};
+
+/* 画像アップロード処理 */
+$("uploadAvatarBtn").onclick = () => $("avatarFileInput").click();
+$("settingsAvatar").onclick = () => $("avatarFileInput").click();
+$("settingsAvatarFallback").onclick = () => $("avatarFileInput").click();
+
+$("avatarFileInput").onchange = async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  $("uploadStatus").textContent = "アップロード中…";
+  try {
+    const fileRef = storageRef(storage, `avatars/${user.uid}_${Date.now()}`);
+    await uploadBytes(fileRef, file);
+    uploadedPhotoURL = await getDownloadURL(fileRef);
+    updateAvatarDisplay(uploadedPhotoURL);
+    $("uploadStatus").textContent = "画像を選択しました（下の保存ボタンを押してください）";
+  } catch (err) {
+    console.error(err);
+    $("uploadStatus").textContent = "アップロードに失敗しました";
+  }
+};
+
+$("saveProfile").onclick = async () => {
+  const n = $("profileName").value.trim();
+  if (!n) { alert("表示名を入力してください"); return; }
+  try {
+    await updateProfile(auth.currentUser, {
+      displayName: n,
+      photoURL: uploadedPhotoURL
+    });
+    $("drawerUserName").textContent = n;
+    $("settingsUserName").textContent = n;
+    updateAvatarDisplay(uploadedPhotoURL);
+    alert("設定を保存しました！");
+  } catch (e) {
+    alert("保存できませんでした");
+    console.error(e);
+  }
+};
+
+$("placeForm").onsubmit = async e => {
+  e.preventDefault();
+  if (!activeRoom) return;
+  const id = $("editId").value;
+  const p = {
+    name: $("placeName").value.trim(),
+    tabelogUrl: $("tabelogUrl").value.trim(),
+    mapUrl: $("mapUrl").value.trim(),
+    note: $("placeNote").value.trim(),
+    updatedByUid: user.uid,
+    updatedByName: userName(),
+    updatedAt: serverTimestamp()
+  };
+  $("saveBtn").disabled = true;
+  try {
+    if (id) {
+      await updateDoc(doc(db, "rooms", activeRoom.id, "places", id), p);
+    } else {
+      await addDoc(collection(db, "rooms", activeRoom.id, "places"), {
+        ...p,
+        visited: false,
+        createdByUid: user.uid,
+        createdByName: userName(),
+        createdAt: serverTimestamp()
+      });
+    }
+    resetForm();
+  } catch (e) {
+    console.error(e);
+    alert("保存できませんでした。");
+  } finally {
+    $("saveBtn").disabled = false;
+  }
+};
+
+$("cancelEdit").onclick = resetForm;
+$("search").oninput = renderPlaces;
+
+document.querySelectorAll("[data-status]").forEach(b => {
+  b.onclick = () => {
+    statusFilter = b.dataset.status;
+    document.querySelectorAll("[data-status]").forEach(x => x.classList.toggle("active", x === b));
+    renderPlaces();
+  };
+});
+
+$("listOnlyBtn").onclick = () => setListOnlyMode(true);
+$("listCloseBtn").onclick = () => setListOnlyMode(false);
+
+/* Drawer & Bottom Nav */
+$("menuToggle").onclick = () => toggleDrawer(true);
+$("closeDrawerBtn").onclick = () => toggleDrawer(false);
+$("drawerBackdrop").onclick = () => toggleDrawer(false);
+$("drawerSettingsBtn").onclick = showSettings;
+
+document.querySelectorAll(".nav-item").forEach(btn => {
+  btn.onclick = () => {
+    const nav = btn.dataset.nav;
+    if (nav === "rooms") {
+      if (activeRoom) {
+        setListOnlyMode(false);
+        $("homeView").classList.add("hidden");
+        $("settingsView").classList.add("hidden");
+        $("roomView").classList.remove("hidden");
+      } else {
+        showHome();
+      }
+    } else if (nav === "list") {
+      if (activeRoom) {
+        $("homeView").classList.add("hidden");
+        $("settingsView").classList.add("hidden");
+        $("roomView").classList.remove("hidden");
+        setListOnlyMode(true);
+      } else if (rooms.length) {
+        openRoom(rooms[0].id).then(() => setListOnlyMode(true));
+      } else {
+        showHome();
+      }
+    } else if (nav === "settings") {
+      showSettings();
+    }
+  };
+});
+</script>
+</body>
+</html>
